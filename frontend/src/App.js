@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 function App() {
   const [communities, setCommunities] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     fetch('/api/communities')
@@ -21,9 +22,27 @@ function App() {
       .catch(() => setPosts([]));
   };
 
+  const searchPosts = (e) => {
+    e.preventDefault();
+    if (!query) return;
+    fetch(`/api/posts/search?q=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(setPosts)
+      .catch(() => setPosts([]));
+  };
+
   return (
     <div>
       <h1>Apekama Communities</h1>
+      <form onSubmit={searchPosts} style={{marginBottom:'1em'}}>
+        <input
+          type="text"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Search posts..."
+        />
+        <button type="submit">Search</button>
+      </form>
       <ul>
         {communities.map(c => (
           <li key={c.id} onClick={() => loadPosts(c.id)} style={{cursor:'pointer'}}>

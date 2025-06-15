@@ -36,3 +36,9 @@ port `8080`.
 
 The backend seeds a couple of communities and posts.  Visiting the frontend will
 display the community list and posts.  Clicking a community loads its posts.
+
+### Searching Posts
+
+You can search posts across all communities using the search box at the top of
+the page. This sends a request to `/api/posts/search?q=term` and displays any
+matching posts by title or content.

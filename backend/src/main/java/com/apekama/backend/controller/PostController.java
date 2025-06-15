@@ -22,6 +22,14 @@ public class PostController {
         this.postRepository = postRepository;
     }
 
+    @GetMapping("/posts/search")
+    public List<Post> searchPosts(@RequestParam("q") String query) {
+        if (query == null || query.isBlank()) {
+            return List.of();
+        }
+        return postRepository.findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(query, query);
+    }
+
     @GetMapping("/communities/{communityId}/posts")
     public List<Post> getPosts(@PathVariable Long communityId) {
         Optional<Community> community = communityRepository.findById(communityId);
